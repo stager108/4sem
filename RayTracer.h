@@ -37,6 +37,12 @@ class RayTracer {
         //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({6,-3,-3}, {6,-3, 3}, {6, 3, 3},{6, 3, -3}, {45, 0, 45},  {45, 0, 45}, {0.3, 0, 0}, 1)));
 
 
+        // test 3
+        //scene.addLights(Point(1.5,0.75,0.75));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.25, {4, 1,0.5}, {0,15,15}, {50, 0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4, 1, 0.5}, {25,0,0}, {50, 70, 1.2})));
+        //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({6,-3,-3}, {6,-3, 3}, {6, 3, 3},{6, 3, -3}, {45, 0, 45},  {45, 0, 45}, {0.3, 0, 0}, 1)));
+
         for (int i = 0; i < screen.getWidth(); i++) {
             for (int j = 0; j < screen.getHeight(); j++) {
                 const Point ray = camera.A + i*dx + j*dy + dx/2 + dy/2 ;
