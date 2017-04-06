@@ -32,3 +32,6 @@ Colour operator * (const Colour c1, const Colour c2);
 Colour operator * (const Colour c, const int k);
 
 Colour operator * (const int k, const Colour c);
+
+Colour operator*( const Colour c, const lld k);
+Colour operator*( const lld k, const Colour c);

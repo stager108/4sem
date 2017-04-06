@@ -21,8 +21,9 @@ struct LightSource {
 struct Material {
     // Required:
     // Ka + Kd + Ks + Kr + Kt = 1.0
-    lld mirror = 0;  //zerkalnost
-    lld clearance = 0; //prozrachnost
+    lld mirror;  //zerkalnost
+    lld clearance; //prozrachnost
+    Material():mirror(0), clearance(0){}
     Material(lld m, lld c): mirror(m),clearance(c){}
 
 };

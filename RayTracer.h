@@ -11,14 +11,14 @@ class RayTracer {
 
     std::vector<Colour> render() {
         std::vector<Colour> ans;
+       // scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1, 0}, {2.5, 0.75, 1}, {2.5, 0, 0.75}, {17,0,120}, {0, 0})));
 
-       // scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0.5}, {0,2,0}, {0, 1})));
-        scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1.6, 1.6}, {2.5, 1.6, 0.9}, {2.5, 0.7, 1.6}, {120, 0, 0}, {0, 0})));
-        scene.addObject(std::shared_ptr<Object>(new Quadrilateral({3,0.4,0.4}, {3,0.4,5.9}, {3,1.9,5.9},{3,1.9, 0.4}, {120,120,0}, {0.1, 0})));
-        //scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1, 0}, {2.5, 0.75, 1}, {2.5, 0, 0.75}, {17,0,12}, {0, 0})));
-       // scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,1}, {3,0,0}, {0,0})));
+         scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {0.5, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1.6, 1.6}, {2.2, 1.6, 0.9}, {2.2, 0.7, 1.6}, {120, 0, 0}, {0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({3,0.4,0.4}, {3,0.4,5.9}, {3,1.9,5.9},{3,1.9, 0.4}, {0,0,255}, {0.5, 0})));
+         scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,1}, {0,25,0}, {0,0})));
         //scene.addLights(Point(2,0,0));
-        scene.addLights(Point(2.85,0.9,1));
+        scene.addLights(Point(1,0.7,1));
 
 
         for (int i = 0; i < screen.getWidth(); i++) {
@@ -45,12 +45,12 @@ class RayTracer {
         if (points.size() > 0) {
             lld cur_len = (points[0].point - camera.Focus).len();
             cur_colour = points[0].colour;
-            for (int i = 1; i < points.size(); i++) {
+            /*for (int i = 1; i < points.size(); i++) {
                 if ((points[i].point - camera.Focus).len() < cur_len) {
                     cur_len = (points[i].point - camera.Focus).len();
                     cur_colour = points[i].colour;
                 }
-            }
+            }*/
         }
         return cur_colour;
     }
