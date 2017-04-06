@@ -15,7 +15,6 @@ class Object {
     virtual lld m() = 0;
     virtual lld c() = 0;
     virtual lld k() = 0;
-    virtual bool areIntersected(Point a, Point b) = 0;
     virtual Point getNormal(Point T, Point S) = 0;
     virtual std::vector<ColouredPoint> getPointOfIntersecting(const Point a, const Point b) = 0;
 
@@ -45,6 +44,8 @@ class Triangle : public Object {
  private:
     Point A, B, C;
     Colour colour;
+    Colour back_colour;
+    int normal;
     Material material;
  public:
     lld m(){
@@ -56,8 +57,8 @@ class Triangle : public Object {
     lld k(){
         return material.k;
     }
-    Triangle(const Point a, const Point b, const Point c, const Colour colour, const Material m) :
-            A(a), B(b), C(c), colour(colour), material(m) {}
+    Triangle(const Point a, const Point b, const Point c, const Colour colour, const Colour back, const Material m, const int n) :
+            A(a), B(b), C(c), colour(colour), back_colour(back), material(m), normal(n) {}
 
     bool areIntersected(const Point P1, const Point P2) {
         std::vector<Point> p = getPointOfIntersectingLineAndPlane(A, B, C, P1, P2);
@@ -70,7 +71,12 @@ class Triangle : public Object {
         if (areIntersected(P1, P2)) {
             ans.resize(1);
             std::vector<Point> p = getPointOfIntersectingLineAndPlane(A, B, C, P1, P2);
-            ans[0] = ColouredPoint(p[0], colour);
+            if( ((P2 - P1)*((B - A)^(B - C))) > 0) {
+                ans[0] = ColouredPoint(p[0], colour);
+            }
+            else{
+                ans[0] = ColouredPoint(p[0], back_colour);
+            }
         }
         return ans;
     }
@@ -105,9 +111,6 @@ class Sphere : public Object {
     }
     lld k(){
         return material.k;
-    }
-    bool areIntersected(Point P1, Point P2) {
-        return isMoreThen(R, triangleHeightFromC(P1, P2, O));
     }
 
     std::vector<ColouredPoint> getPointOfIntersecting(Point A, Point B) {
@@ -148,6 +151,10 @@ class Sphere : public Object {
     }
 
  private:
+
+    bool areIntersected(Point P1, Point P2) {
+        return isMoreThen(R, triangleHeightFromC(P1, P2, O));
+    }
     lld triangleHeightFromC(const Point A, const Point B, const Point C) {
         return ((C - A) ^ (C - B)).len();
     }
@@ -158,9 +165,11 @@ class Quadrilateral : public Object {
     Point A, B, C, D;
     Colour colour;
     Material material;
+    Colour back_colour;
+    int normal;
  public:
-    Quadrilateral(const Point a, const Point b, const Point c, const Point d, const Colour colour, const Material m) :
-        A(a), B(b), C(c), D(d), colour(colour), material(m) {}
+    Quadrilateral(const Point a, const Point b, const Point c, const Point d, const Colour colour, const Colour back, const Material m, const int n) :
+        A(a), B(b), C(c), D(d), colour(colour), material(m), back_colour(back), normal(n) {}
 
     lld m(){
         return material.mirror;
@@ -172,20 +181,26 @@ class Quadrilateral : public Object {
         return material.k;
     }
 
-    bool areIntersected(const Point P1, const Point P2) {
-        return areIntersecteds(A, B, C, P1, P2) || areIntersecteds(A, C, D, P1, P2);
-    }
-
     std::vector<ColouredPoint> getPointOfIntersecting(const Point P1, const Point P2) {
         std::vector<ColouredPoint> ans;
         if(areIntersected(P1,P2)) {
             ans.resize(1);
             if (areIntersecteds(A, B, C, P1, P2)) {
                 std::vector<Point> p = getPointOfIntersectingLineAndPlane(A, B, C, P1, P2);
-                ans[0] = ColouredPoint(p[0], colour);
+                if( ((P2 - P1)*((B - A)^(B - C))) > 0) {
+                    ans[0] = ColouredPoint(p[0], colour);
+                }
+                else{
+                    ans[0] = ColouredPoint(p[0], back_colour);
+                }
             } else {
                 std::vector<Point> p = getPointOfIntersectingLineAndPlane(D, B, C, P1, P2);
-                ans[0] = ColouredPoint(p[0], colour);
+                if( ((P2 - P1)*((B - A)^(B - C))) > 0) {
+                    ans[0] = ColouredPoint(p[0], colour);
+                }
+                else{
+                    ans[0] = ColouredPoint(p[0], back_colour);
+                }
             }
         }
         return ans;
@@ -202,7 +217,13 @@ class Quadrilateral : public Object {
         }
         return ans;
     }
+
  private:
+
+    bool areIntersected(const Point P1, const Point P2) {
+        return areIntersecteds(A, B, C, P1, P2) || areIntersecteds(A, C, D, P1, P2);
+    }
+
     bool areIntersecteds(const Point a, const Point b, const Point c, const Point P1, const Point P2) {
         std::vector<Point> p = getPointOfIntersectingLineAndPlane(a, b, c, P1, P2);
         return ((!areComplanar(b - c, a - c, P2 - P1)) && (p.size() > 0) &&

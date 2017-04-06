@@ -10,7 +10,7 @@ struct ColouredPoint {
     ColouredPoint(Point point, Colour colour) : point(point), colour(colour) {}
 };
 
-struct LightSource {
+struct LightPoint {
     // Absolute location
     Point location_world;
     // Location on projection
@@ -25,6 +25,6 @@ struct Material {
     lld clearance; //prozrachnost
     lld k;
     Material():mirror(0), clearance(0){}
-    Material(lld m, lld c, lld k): mirror(m),clearance(c), k(k){}
+    Material(lld m, lld c, lld k): mirror(m/100),clearance(c/100), k(k){}
 
 };

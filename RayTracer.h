@@ -22,11 +22,19 @@ class RayTracer {
          //scene.addLights(Point(1,0.7,1));
 
         //test 1
-        scene.addLights(Point(1,0,0));
-        scene.addObject(std::shared_ptr<Object>(new Sphere(0.25, {4, 1,0.5}, {0,25,25}, {0.5, 0, 0})));
-        scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {0.5, 0, 0})));
-        scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 0.6, 0.6}, {2.2, 0.6, -0.1}, {2.2, -0.3, 0.6}, {12, 12, 0}, {0, 0.5, 1.2})));
+        //scene.addLights(Point(1,0,0));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.25, {4, 1,0.5}, {0,25,25}, {50, 0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {50, 0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 0.6, 0.6}, {2.2, 0.6, -0.1}, {2.2, -0.3, 0.6}, {12, 12, 0},{12, 12, 0}, {0, 50, 1.2}, 1)));
+        //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({6,-3,-3}, {6,-3, 3}, {6, 3, 3},{6, 3, -3}, {45, 0, 45},  {45, 0, 45}, {0.3, 0, 0}, 1)));
 
+        //test 2
+        //scene.addLights(Point(1.5,0.75,0.75));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.25, {4, 1,0.5}, {0,25,25}, {50, 0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {50, 0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.35, {4, 1.9,0.4}, {25,25,25}, {50, 0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Sphere(0.75, {4,0.5,0.5}, {25,0,25}, {50, 40, 1})));
+        //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({6,-3,-3}, {6,-3, 3}, {6, 3, 3},{6, 3, -3}, {45, 0, 45},  {45, 0, 45}, {0.3, 0, 0}, 1)));
 
 
         for (int i = 0; i < screen.getWidth(); i++) {
