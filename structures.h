@@ -23,7 +23,8 @@ struct Material {
     // Ka + Kd + Ks + Kr + Kt = 1.0
     lld mirror;  //zerkalnost
     lld clearance; //prozrachnost
+    lld k;
     Material():mirror(0), clearance(0){}
-    Material(lld m, lld c): mirror(m),clearance(c){}
+    Material(lld m, lld c, lld k): mirror(m),clearance(c), k(k){}
 
 };

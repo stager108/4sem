@@ -8,7 +8,7 @@ int main()
     unsigned int width = 800, height = 800;
     sf::RenderWindow window(sf::VideoMode(width, height), "RayTracer");
     Screen scr(width, height);
-    Scene myscn(Colour(40, 40, 40));
+    Scene myscn(Colour(100, 100, 100));
     Camera camera(Point(0, 0.5, 0.5), Point(1, 0, 0), Point(1,0,1), Point(1,1,1), Point(1,1, 0));
     RayTracer RT(scr, myscn, camera);
     RT.render();

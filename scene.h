@@ -31,17 +31,21 @@ class Scene {
         return source.colour;
     }
 
-    Colour getAnotherColour(ColouredPoint source, Point A, size_t number, char e) {
+    Colour getAnotherColour(ColouredPoint source, Point A, size_t number, char e, size_t count) {
+        if(count > 4)
+            return source.colour;
+
         Point ray;
         switch(e){
             case 'm': ray = mirrorRay(source.point - A, Figures[number]->getNormal(source.point, A)); break;
-            case 'b': ray = brokenRay(source.point - A, Figures[number]->getNormal(source.point, A)); break;
+            case 'b': ray = brokenRay(source.point - A, Figures[number]->getNormal(source.point, A), 1, Figures[number]->k()); break;
         }
 
         Point s = source.point + ray/(ray.len()) * eps;
         std::vector<ColouredPoint> next;
         lld k = Figures[number]->m();
         lld cur_len = 100000000;
+        size_t  n;
         Colour c = background_colour;
 
         for (size_t j = 0; j < Figures.size(); j++) {
@@ -49,7 +53,11 @@ class Scene {
             for (size_t i = 0; i < next.size(); i++) {
                 if ((next[i].point - source.point).len() < cur_len) {
                     cur_len = (next[i].point - s).len();
-                    c = next[i].colour;
+                    n = j;
+                    Colour c1 = getAnotherColour(next[i], s, j ,'m', count+1);
+                    Colour c2 = getAnotherColour(next[i], s, j ,'b', count+1);
+
+                    c = (next[i].colour) * (1.0 - Figures[number]->m() - Figures[number]->c()) + c1 * (Figures[number]->m()) + c2*(Figures[number]->c());
                 }
             }
         }
@@ -90,10 +98,10 @@ class Scene {
         }
 
         if (flag == 1){
-            Colour c1 = getAnotherColour(cur_point, A, number, 'm');
-            Colour c2 = getAnotherColour(cur_point, A, number, 'b');
-            lld g = (1.0 - Figures[number]->m());
-            cur_point.colour = (cur_point.colour) * g + c1 * (Figures[number]->m());
+            Colour c1 = getAnotherColour(cur_point, A, number, 'm', 1);
+            Colour c2 = getAnotherColour(cur_point, A, number, 'b', 1);
+            lld g = (1.0 - Figures[number]->m() - Figures[number]->c());
+            cur_point.colour = (cur_point.colour) * g + c1 * (Figures[number]->m()) + c2*(Figures[number]->c());
             cur_point.colour = getFoton(cur_point, A);
             answer.push_back(cur_point);
         }

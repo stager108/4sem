@@ -75,4 +75,4 @@ bool areCoDirected(Point A, Point B);
 bool areOppositeDirected(Point A, Point B);
 
 Point mirrorRay(Point ray, Point normal);
-Point brokenRay(Point ray, Point normal);
+Point brokenRay(Point ray, Point normal, lld k1, lld k2);

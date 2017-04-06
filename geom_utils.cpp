@@ -94,7 +94,10 @@ Point mirrorRay(Point ray, Point normal){
 	//std::cout <<"ans "<< ans.x << " "<<ans.y << " "<<ans.z<<std::endl;
 	return ans;
 }
-Point brokenRay(Point ray, Point normal){
-	Point w = normal * (ray * normal /normal.len2());
-	return ray;
+Point brokenRay(Point ray, Point normal, lld k1, lld k2){
+	Point e = normal * ray * normal /normal.len2();
+	Point w = ray - normal * (ray * normal /normal.len2());
+	w = w * k1/k2;
+	e = e + w;
+	return e;
 }

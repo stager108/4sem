@@ -13,6 +13,8 @@ class Object {
     virtual ~Object() {}
 
     virtual lld m() = 0;
+    virtual lld c() = 0;
+    virtual lld k() = 0;
     virtual bool areIntersected(Point a, Point b) = 0;
     virtual Point getNormal(Point T, Point S) = 0;
     virtual std::vector<ColouredPoint> getPointOfIntersecting(const Point a, const Point b) = 0;
@@ -47,6 +49,12 @@ class Triangle : public Object {
  public:
     lld m(){
         return material.mirror;
+    }
+    lld c(){
+        return material.clearance;
+    }
+    lld k(){
+        return material.k;
     }
     Triangle(const Point a, const Point b, const Point c, const Colour colour, const Material m) :
             A(a), B(b), C(c), colour(colour), material(m) {}
@@ -92,7 +100,12 @@ class Sphere : public Object {
     lld m(){
         return material.mirror;
     }
-
+    lld c(){
+        return material.clearance;
+    }
+    lld k(){
+        return material.k;
+    }
     bool areIntersected(Point P1, Point P2) {
         return isMoreThen(R, triangleHeightFromC(P1, P2, O));
     }
@@ -152,6 +165,13 @@ class Quadrilateral : public Object {
     lld m(){
         return material.mirror;
     }
+    lld c(){
+        return material.clearance;
+    }
+    lld k(){
+        return material.k;
+    }
+
     bool areIntersected(const Point P1, const Point P2) {
         return areIntersecteds(A, B, C, P1, P2) || areIntersecteds(A, C, D, P1, P2);
     }

@@ -11,14 +11,20 @@ class RayTracer {
 
     std::vector<Colour> render() {
         std::vector<Colour> ans;
-       // scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1, 0}, {2.5, 0.75, 1}, {2.5, 0, 0.75}, {17,0,120}, {0, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1, 0}, {2.5, 0.75, 1}, {2.5, 0, 0.75}, {17,0,120}, {0, 0})));
 
-         scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {0.5, 0})));
-        //scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1.6, 1.6}, {2.2, 1.6, 0.9}, {2.2, 0.7, 1.6}, {120, 0, 0}, {0, 0})));
-        //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({3,0.4,0.4}, {3,0.4,5.9}, {3,1.9,5.9},{3,1.9, 0.4}, {0,0,255}, {0.5, 0})));
-         scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,1}, {0,25,0}, {0,0})));
-        //scene.addLights(Point(2,0,0));
-        scene.addLights(Point(1,0.7,1));
+        // scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {0.5, 0})));
+        //scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1.6, 1.6}, {2.2, 1.6, 0.9}, {2.2, 0.7, 1.6}, {120, 0, 0}, {0, 0.5, 0.7})));
+        //scene.addObject(std::shared_ptr<Object>(new Quadrilateral({3,0.4,0.4}, {3,0.4,5.9}, {3,1.9,5.9},{3,1.9, 0.4}, {0,0,255}, {0.5, 0, 1})));
+         //scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,1}, {0,25,0}, {0,0})));
+        // scene.addLights(Point(1,0.7,1));
+
+        //test 1
+        scene.addLights(Point(1,0,0));
+         scene.addObject(std::shared_ptr<Object>(new Sphere(0.25, {4, 1,0.5}, {0,25,25}, {0.5, 0, 0})));
+        scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,25}, {0.5, 0, 0})));
+        scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 0.6, 0.6}, {2.2, 0.6, -0.1}, {2.2, -0.3, 0.6}, {12, 12, 0}, {0, 0.5, 1.2})));
+
 
 
         for (int i = 0; i < screen.getWidth(); i++) {
