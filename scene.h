@@ -22,7 +22,8 @@ class Scene {
                 if (areCoDirected(normal1,normal2)) {
                     next = Figures[i]->getPointOfIntersecting(ans, Lights[j]);
                     if (next.size() == 0) {
-                        lightness += 2 / ((Lights[j] - source.point).len2());
+                        lightness += 2 / ((Lights[j] - source.point).len2()) *\
+                         fabsl(normal1 * (source.point - Lights[j]) / (source.point- Lights[j]).len());
                     }
                 }
             }
