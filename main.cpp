@@ -1,25 +1,36 @@
-#include "mainwindow.h"
-#include <QApplication>
+
+#include <SFML/Graphics.hpp>
 #include "RayTracer.h"
+#include "Screen.h"
 
-int main(int argc, char *argv[])
+int main()
 {
-	Scene myscn(Colour(MAX_RGB, MAX_RGB, MAX_RGB));
-	Camera camera(Point(0,0,0), Point(0,0,0));
-    Screen scr(640, 480);
-	RayTracer RT(scr, myscn, camera, Point(1,0,0), 20 );
-	QApplication a(argc, argv);
-    MainWindow w(scr);
-	int weight = 640;
-	int height = 480;
-	std::vector<Colour> ans = RT.render(weight, height);
-    for (int i = 0; i<weight; ++i) {
-		for(int j = 0; j < height; j++) {
-			Colour np = ans[i*weight + j];
-			scr.putPixel({i, j}, {np.r, np.g, np.b});
-		}
-    }
-    w.show();
+    unsigned int width = 800, height = 800;
+    sf::RenderWindow window(sf::VideoMode(width, height), "RayTracer");
+    Screen scr(width, height);
+    Scene myscn(Colour(255, 255, 255));
+    Camera camera(Point(0, 0.5, 0.5), Point(1, 0, 0), Point(1,0,1), Point(1,1,1), Point(1,1, 0));
+    RayTracer RT(scr, myscn, camera);
+    RT.render();
 
-    return a.exec();
+    window.clear();
+    sf::Texture texture;
+    texture.loadFromImage(scr.getImage());
+    sf::Sprite sprite;
+    sprite.setTexture(texture, true);
+
+    window.draw(sprite);
+    window.display();
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+    }
+
+    return 0;
 }

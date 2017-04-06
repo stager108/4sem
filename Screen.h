@@ -1,25 +1,28 @@
 #pragma once
 
-#include <QtGui/QImage>
-#include "colour.h"
+#include <SFML/Graphics.hpp>
 
 struct Vector2d {
     int x, y;
 };
 
 class Screen {
-    public:
+public:
 
-    Screen(int width, int height) :img(width, height, QImage::Format_RGB32) {}
-
-    void putPixel(const Vector2d position, const Colour color) {
-        img.setPixelColor(position.x, position.y, QColor(color.r, color.g, color.b));
+    Screen(int width, int height){
+        img.create(width, height);
     }
 
-    const QImage& getQImage() { return img; }
+    void putPixel(const Vector2d position, const Colour color) {
+        img.setPixel(position.x, position.y, sf::Color(color.r, color.g, color.b));
+    }
 
-    QSize getSize() { return img.size(); }
+    const sf::Image getImage() { return img; }
 
-    private:
-    QImage img;
+    unsigned int getHeight() { return img.getSize().y; }
+    unsigned int getWidth() { return img.getSize().x; }
+
+private:
+    sf::Image img;
+
 };

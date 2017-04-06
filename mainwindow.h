@@ -3,7 +3,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QPicture>
-#include "Screen.h"
+#include "Screen2.h"
 
 namespace Ui {
 class MainWindow;

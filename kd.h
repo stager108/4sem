@@ -26,107 +26,78 @@ private:
 	int const OBJECTS_IN_LEAF = 1;
 	int const MAX_SPLITS_OF_VOXEL = 5;
 	int const SPLIT_COST = 5;
-
+	Node* root;
+	Voxel bounding_box;
 	struct Node{
-
+		Node* l;
+		Node* r;
+		std::vector<Object> objects;
 
 	};
-	struct Voxel{
-			};
+	struct Voxel {
+		lld x_min;
+		lld y_min;
+		lld z_min;
+		lld x_max;
+		lld y_max;
+		lld z_max;
+	};
+
 public:
 
 
-	Voxel*
-	make_initial_voxel(std::vector <Object> objects,
-					   int objects_count);
-
-	Node *
-	rec_build( std::vector <Object> objects,
-			  int objects_count,
-			  Voxel* v,
-			  int iter);
+	Voxel	make_initial_voxel(std::vector <Object> objects,int objects_count);
+	Node * rec_build( std::vector <Object> objects, int objects_count, Voxel* v, int iter);
 
 	Node *
 	make_leaf(std::vector <Object> objects,
 			  int objects_count);
 
-	void
-	find_plane(std::vector <Object> objects,
-			   const int objects_count,
-			   const Voxel v,
-			   const int tree_depth,
-			   enum Plane * const p,
-			   Point * const c);
+	void find_plane(std::vector <Object> objects, const int objects_count, const Voxel v,
+			   const int tree_depth, enum Plane * const p, Point * const c);
 
-	int
-	objects_in_voxel(std::vector <Object> objects,
-					 const int objects_count,
-					 const Voxel v);
+	int	objects_in_voxel(std::vector <Object> objects, const int objects_count, const Voxel v);
 
 	void
-	split_voxel(const Voxel v,
-				const enum Plane p,
-				const Point c,
-				Voxel * const vl,
-				Voxel * const vr);
+	split_voxel(const Voxel v, const enum Plane p, const Point c, Voxel * const vl,	Voxel * const vr);
 
-	int
-	filter_overlapped_objects(std::vector <Object> objects,
-							  const int objects_count,
-							  const Voxel v);
-
+	int	filter_overlapped_objects(std::vector <Object> objects, const int objects_count, const Voxel v);
+/*
 	bool
 	vector_plane_intersection(const Point vector,
 							  const Point vector_start,
 							  const enum Plane plane,
 							  const Point coord,
 							  Point * const result);
-
+*/
 	bool
 	voxel_intersection(const Point vector,
 					   const Point vector_start,
 					   const Voxel v);
 
-	bool
-	object_in_voxel(Object const obj,
-					const Voxel v);
+	bool object_in_voxel(Object const obj, const Voxel v);
 
-	bool
-	point_in_voxel(const Point p,
-				   const Voxel v);
+	bool point_in_voxel(const Point p, const Voxel v);
 
-	bool
-	find_intersection_node(Node * const node,
-						   const Voxel v,
-						   const Point vector_start,
-						   const Point vector,
-						   Object const nearest_obj_ptr,
-						   Point const nearest_intersection_point_ptr,
+	bool find_intersection_node(Node * const node, const Voxel v, const Point vector_start, const Point vector,
+						   Object const nearest_obj_ptr, Point const nearest_intersection_point_ptr,
 						   lld * const nearest_intersection_point_dist_ptr);
 
-	bool
-	is_intersect_anything_node(Node * const node,
-							   const Voxel v,
-							   const Point vector_start,
-							   const Point vector);
+	bool is_intersect_anything_node(Node * const node, const Voxel v, const Point vector_start, const Point vector);
 
-	void
-	release_kd_node(Node * node);
-
+	void release_kd_node(Node * node);
 
 // Code
 // --------------------------------------------------------------
 
-	bool
-	point_in_voxel(const Point p,
-				   const Voxel v) {
+/*	bool point_in_voxel(const Point p, const Voxel v) {
 
 		return ((p.x > v.x_min) && (p.x < v.x_max) &&
 				(p.y > v.y_min) && (p.y < v.y_max) &&
 				(p.z > v.z_min) && (p.z < v.z_max));
 	}
 
-
+/*
 	void
 	release_kd_tree(KDTree * tree) {
 		release_kd_node(tree->root);
@@ -143,18 +114,18 @@ public:
 			free(node->objects);
 		free(node);
 	}
-
+*/
 	KDTree *
-	build_kd_tree(Object3d ** objects,
+	build_kd_tree( std::vector<Object> objects,
 				  int objects_count) {
 
-		KDTree * tree = malloc(sizeof(KDTree));
-		tree->bounding_box = make_initial_voxel(objects, objects_count);
-		tree->root = rec_build(objects, objects_count, tree->bounding_box, 0);
-		return tree;
+		KDTree tree;
+		tree.bounding_box = make_initial_voxel(objects, objects_count);
+		tree.root = rec_build(objects, objects_count, tree.bounding_box, 0);
+		return &tree;
 	}
 
-	inline Node *
+	Node *
 	rec_build(std::vector<Point> objects,
 			  int objects_count,
 			  Voxel v,
@@ -179,15 +150,15 @@ public:
 		Node * r = rec_build(objects, r_objects_count, vr, iter + 1);
 
 
-		Node * node = malloc(sizeof(Node));
-		node->objects = NULL;
-		node->objects_count = 0;
-		node->plane = p;
-		node->coord = c;
-		node->l = l;
-		node->r = r;
+		Node node;
+		node.objects = NULL;
+		node.objects_count = 0;
+		node.plane = p;
+		node.coord = c;
+		node.l = l;
+		node.r = r;
 
-		return node;
+		return &node;
 	}
 
 	int filter_overlapped_objects(std::vector<Point> objects,
@@ -534,9 +505,7 @@ public:
 	}
 
 	bool
-	voxel_intersection(const Point vector,
-					   const Point vector_start,
-					   const Voxel v) {
+	voxel_intersection(const Point vector, const Point vector_start, const Voxel v) {
 
 		if(point_in_voxel(vector_start, v))
 			return True;
@@ -546,72 +515,52 @@ public:
 
 		c.z = v.z_min;
 		if(vector_plane_intersection(vector, vector_start, XY, c, &p)
-		   && (p.x > v.x_min) && (p.x < v.x_max)
-		   && (p.y > v.y_min) && (p.y < v.y_max)) {
-
+		   && (p.x > v.x_min) && (p.x < v.x_max)&& (p.y > v.y_min) && (p.y < v.y_max)) {
 			return True;
 		}
 
 		c.z = v.z_max;
 		if(vector_plane_intersection(vector, vector_start, XY, c, &p)
-		   && (p.x > v.x_min) && (p.x < v.x_max)
-		   && (p.y > v.y_min) && (p.y < v.y_max)) {
-
+		   && (p.x > v.x_min) && (p.x < v.x_max)&& (p.y > v.y_min) && (p.y < v.y_max)) {
 			return True;
 		}
 
 		c.y = v.y_min;
 		if(vector_plane_intersection(vector, vector_start, XZ, c, &p)
-		   && (p.x > v.x_min) && (p.x < v.x_max)
-		   && (p.z > v.z_min) && (p.z < v.z_max)) {
-
+		   && (p.x > v.x_min) && (p.x < v.x_max) && (p.z > v.z_min) && (p.z < v.z_max)) {
 			return True;
 		}
 
 		c.y = v.y_max;
 		if(vector_plane_intersection(vector, vector_start, XZ, c, &p)
-		   && (p.x > v.x_min) && (p.x < v.x_max)
-		   && (p.z > v.z_min) && (p.z < v.z_max)) {
-
+		   && (p.x > v.x_min) && (p.x < v.x_max) && (p.z > v.z_min) && (p.z < v.z_max)) {
 			return True;
 		}
 
 		c.x = v.x_min;
 		if(vector_plane_intersection(vector, vector_start, YZ, c, &p)
-		   && (p.y > v.y_min) && (p.y < v.y_max)
-		   && (p.z > v.z_min) && (p.z < v.z_max)) {
-
+		   && (p.y > v.y_min) && (p.y < v.y_max) && (p.z > v.z_min) && (p.z < v.z_max)) {
 			return True;
 		}
 
 		c.x = v.x_max;
 		if(vector_plane_intersection(vector, vector_start, YZ, c, &p)
-		   && (p.y > v.y_min) && (p.y < v.y_max)
-		   && (p.z > v.z_min) && (p.z < v.z_max)) {
-
+		   && (p.y > v.y_min) && (p.y < v.y_max) && (p.z > v.z_min) && (p.z < v.z_max)) {
 			return True;
 		}
-
 		return False;
 	}
 
 	bool
-	find_intersection_tree(KDTree * const tree,
-						   const Point vector_start,
-						   const Point vector,
+	find_intersection_tree(KDTree * const tree, const Point vector_start, const Point vector,
 						   std::vector <Object> objects const nearest_obj_ptr,
 						   Point * const nearest_intersection_point_ptr,
 						   lld * const nearest_intersection_point_dist_ptr) {
 
 #ifndef NO_BOUNDING_BOX
 		return (voxel_intersection(vector, vector_start, tree->bounding_box)
-				&& find_intersection_node(tree->root,
-										  tree->bounding_box,
-										  vector_start,
-										  vector,
-										  nearest_obj_ptr,
-										  nearest_intersection_point_ptr,
-										  nearest_intersection_point_dist_ptr));
+				&& find_intersection_node(tree->root, tree->bounding_box, vector_start, vector, nearest_obj_ptr,
+										  nearest_intersection_point_ptr, nearest_intersection_point_dist_ptr));
 #else
 		// Do not take into account scene bounds
     return find_intersection_node(tree->root,
@@ -625,10 +574,7 @@ public:
 	}
 
 	bool
-	find_intersection_node(Node * const node,
-						   const Voxel v,
-						   const Point vector_start,
-						   const Point vector,
+	find_intersection_node(Node * const node,  const Voxel v, const Point vector_start, const Point vector,
 						   std::vector <Object> objects const nearest_obj_ptr,
 						   Point * const nearest_intersection_point_ptr,
 						   lld * const nearest_intersection_point_dist_ptr) {
@@ -748,23 +694,13 @@ public:
 		}
 
 		if(voxel_intersection(vector, vector_start, front_voxel)
-		   && find_intersection_node(front_node,
-									 front_voxel,
-									 vector_start,
-									 vector,
-									 nearest_obj_ptr,
-									 nearest_intersection_point_ptr,
-									 nearest_intersection_point_dist_ptr))
+		   && find_intersection_node(front_node, front_voxel, vector_start, vector, nearest_obj_ptr,
+									 nearest_intersection_point_ptr, nearest_intersection_point_dist_ptr))
 			return True;
 
 		return (voxel_intersection(vector, vector_start, back_voxel)
-				&& find_intersection_node(back_node,
-										  back_voxel,
-										  vector_start,
-										  vector,
-										  nearest_obj_ptr,
-										  nearest_intersection_point_ptr,
-										  nearest_intersection_point_dist_ptr));
+				&& find_intersection_node(back_node, back_voxel, vector_start, vector, nearest_obj_ptr,
+										  nearest_intersection_point_ptr, nearest_intersection_point_dist_ptr));
 
 
 

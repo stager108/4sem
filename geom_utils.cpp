@@ -32,7 +32,7 @@ Point operator*(const Point p, lld d) {
 	return d*p;
 }
 
-Point operator/(lld d, const Point p) {
+Point operator/(const Point p, lld d) {
 	return Point( p.x / d , p.y / d , p.z / d);
 }
 
@@ -40,7 +40,8 @@ lld operator*(const Point p1, const Point p2) {
 	return p1.x * p2.x + p1.y * p2.y + p1.z * p2.z;
 }
 
-Point operator^(const Point p1, const Point p2) {
+Point operator^ (const Point p1, const Point p2) {
+   // std::cout <<"^^ "<< p1.y * p2.z - p1.z * p2.y << " " << p1.z * p2.x - p1.x * p2.z<< " " <<p1.x * p2.y - p1.y * p2.x<<std::endl;
 	return Point(p1.y * p2.z - p1.z * p2.y , p1.z * p2.x - p1.x * p2.z , p1.x * p2.y - p1.y * p2.x);
 }
 
@@ -69,6 +70,7 @@ bool areComplanar(const Point V1, const Point V2, const Point V3) {
 }
 
 bool areCoDirected(Point A, Point B) {
+   // std::cout << " * "<< (A * B) << " " << (A ^ B).len()<< std::endl;
 	return isZero(A ^ B) && (sign(A * B) >= 0);
 }
 
@@ -84,4 +86,11 @@ int sign(lld z) {
 	if(isZero(z))
 		return 0;
 	return (z>0)?1:-1;
+}
+
+Point mirrorRay(Point ray, Point normal){
+	//std::cout <<"ray "<< ray.x << " "<<ray.y << " "<<ray.z<<std::endl;
+	Point ans = ray - 2 * normal * (ray * normal /normal.len2());
+	//std::cout <<"ans "<< ans.x << " "<<ans.y << " "<<ans.z<<std::endl;
+	return ans;
 }
