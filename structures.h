@@ -12,10 +12,12 @@ struct ColouredPoint {
 
 struct LightPoint {
     // Absolute location
-    Point location_world;
-    // Location on projection
     Point location;
-    Colour colour;
+    lld k;
+    LightPoint():location(0,0,0), k(0){}
+
+    LightPoint(Point l, lld k):location(l), k(k){}
+    //Colour colour;
 };
 
 struct Material {

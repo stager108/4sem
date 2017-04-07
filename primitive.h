@@ -71,7 +71,7 @@ class Triangle : public Object {
         if (areIntersected(P1, P2)) {
             ans.resize(1);
             std::vector<Point> p = getPointOfIntersectingLineAndPlane(A, B, C, P1, P2);
-            if( ((P2 - P1)*((B - A)^(B - C))) > 0) {
+            if( ((P2 - P1)*((B - A)^(B - C)))*normal > 0) {
                 ans[0] = ColouredPoint(p[0], colour);
             }
             else{
@@ -187,7 +187,7 @@ class Quadrilateral : public Object {
             ans.resize(1);
             if (areIntersecteds(A, B, C, P1, P2)) {
                 std::vector<Point> p = getPointOfIntersectingLineAndPlane(A, B, C, P1, P2);
-                if( ((P2 - P1)*((B - A)^(B - C))) > 0) {
+                if( ((P2 - P1)*((B - A)^(B - C)))*normal > 0) {
                     ans[0] = ColouredPoint(p[0], colour);
                 }
                 else{
@@ -195,7 +195,7 @@ class Quadrilateral : public Object {
                 }
             } else {
                 std::vector<Point> p = getPointOfIntersectingLineAndPlane(D, B, C, P1, P2);
-                if( ((P2 - P1)*((B - A)^(B - C))) > 0) {
+                if( ((P2 - P1)*((B - A)^(B - C)))*normal > 0) {
                     ans[0] = ColouredPoint(p[0], colour);
                 }
                 else{

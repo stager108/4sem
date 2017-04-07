@@ -10,20 +10,20 @@
 class Scene {
  private:
     std::vector<std::shared_ptr<Object>> Figures;
-    std::vector<Point> Lights;
+    std::vector<LightPoint> Lights;
     Colour getFoton(ColouredPoint source, Point A) {
         Point ans = source.point + (A - source.point)/((A - source.point).len()) *eps;
         lld lightness = 0.5;
         std::vector<ColouredPoint> next;
         for (int j = 0; j < Lights.size(); j++) {
             for (size_t i = 0; i < Figures.size(); i++) {
-                Point normal1 = Figures[i]->getNormal(source.point, Lights[j]);
+                Point normal1 = Figures[i]->getNormal(source.point, Lights[j].location);
                 Point normal2 = Figures[i]->getNormal(source.point, A);
                 if (areCoDirected(normal1,normal2)) {
-                    next = Figures[i]->getPointOfIntersecting(ans, Lights[j]);
+                    next = Figures[i]->getPointOfIntersecting(ans, Lights[j].location);
                     if (next.size() == 0) {
-                        lightness += 2 / ((Lights[j] - source.point).len2()) *\
-                         fabsl(normal1 * (source.point - Lights[j]) / (source.point- Lights[j]).len() / normal1.len());
+                        lightness += Lights[j].k/ ((Lights[j].location - source.point).len2()) *\
+                         fabsl(normal1 * (source.point - Lights[j].location) / (source.point- Lights[j].location).len() / normal1.len());
                     }
                 }
             }
@@ -68,14 +68,14 @@ class Scene {
  public:
     Colour background_colour;
 
-    Scene(Colour bc, const std::vector<std::shared_ptr<Object>> &Fig = {}, const std::vector<Point> &L = {}) :
+    Scene(Colour bc, const std::vector<std::shared_ptr<Object>> &Fig = {}, const std::vector<LightPoint> &L = {}) :
         Figures(Fig), Lights(L), background_colour(bc) {}
 
     void addObject(const std::shared_ptr<Object> &obj) {
         Figures.push_back(obj);
     }
 
-    void addLights(const Point &light) {
+    void addLights(const LightPoint &light) {
         Lights.push_back(light);
     }
 
