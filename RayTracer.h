@@ -15,11 +15,11 @@ class RayTracer {
         scene.addLights(LightPoint(Point(1,0.7,1), 2));
         scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1, 0}, {2.5, 0.75, 1}, {2.0, 0, 0.75}, {17,0,120},{17,0,120}, {0, 50, 1},1)));
 
-     scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,55}, {0.5, 0, 0})));
-        scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1.6, 1.6}, {2.2, 1.6, 0.9}, {2.2, 0.7, 1.6}, {120, 0, 0}, {0,120, 0}, {0, 50, 1.2},1)));
-        scene.addObject(std::shared_ptr<Object>(new Quadrilateral({3,0.4,0.4}, {3,0.4,5.9}, {3,1.9,5.9},{3,1.9, 0.4}, {0,0,255}, {0,0,255}, {70, 0, 0},1)));
-        scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,1}, {0,55,0}, {0,0, 0})));
-        scene.addLights(LightPoint(Point(1,0.7,5), 3));
+     //scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,0}, {0,0,55}, {0.5, 0, 0})));
+      //  scene.addObject(std::shared_ptr<Object>(new Triangle({2.5, 1.6, 1.6}, {2.2, 1.6, 0.9}, {2.2, 0.7, 1.6}, {120, 0, 0}, {0,120, 0}, {0, 50, 1.2},1)));
+      //  scene.addObject(std::shared_ptr<Object>(new Quadrilateral({3,0.4,0.4}, {3,0.4,5.9}, {3,1.9,5.9},{3,1.9, 0.4}, {0,0,255}, {0,0,255}, {70, 0, 0},1)));
+      //  scene.addObject(std::shared_ptr<Object>(new Sphere(0.5, {4,0.5,1}, {0,55,0}, {0,0, 0})));
+      //  scene.addLights(LightPoint(Point(1,0.7,5), 3));
 //
         //test
         //scene.addLights(LightPoint(Point(1,0.7,0.9), 32));
@@ -53,8 +53,22 @@ class RayTracer {
 
         for (int i = 0; i < screen.getWidth(); i++) {
             for (int j = 0; j < screen.getHeight(); j++) {
-                const Point ray = camera.A + i*dx + j*dy + dx/2 + dy/2 ;
-                const Colour col = trace(camera.Focus, ray);
+                const Point ray1 = camera.A + (i-1)*dx + j*dy + dx/2 + dy/2;
+                const Colour col1 = trace(camera.Focus, ray1);
+
+                const Point ray2 = camera.A + (i+1)*dx + j*dy + dx/2 + dy/2;
+                const Colour col2 = trace(camera.Focus, ray2);
+
+                const Point ray3 = camera.A + i*dx + (j+1)*dy + dx/2 + dy/2;
+                const Colour col3 = trace(camera.Focus, ray3);
+
+                const Point ray4 = camera.A + i*dx + (j-1)*dy + dx/2 + dy/2;
+                const Colour col4 = trace(camera.Focus, ray4);
+
+                Colour col((int)(((double)(col1.r + col2.r+col3.r+col4.r))/4),
+                        (int)(((double)(col1.g + col2.g+col3.g+col4.g))/4),
+                        (int)(((double)(col1.b + col2.b+col3.b+col4.r))/4));
+
                 screen.putPixel({i, j}, col);
             }
         }
